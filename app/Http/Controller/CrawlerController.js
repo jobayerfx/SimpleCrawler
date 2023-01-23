@@ -1,6 +1,6 @@
+const service = require('../../Service/CrawlerService/CrawlerService')
 module.exports = {
     crawler : (req, res) => {
-        const { url } = req.body
-        return  res.status(200).json({ msg: 'Controller Activated' })
+        return service.crawler(req, res)
     }
 }
