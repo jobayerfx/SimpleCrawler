@@ -1,5 +1,6 @@
 const Crawler = require("simplecrawler");
 const cheerio = require("cheerio");
+const axios = require("axios");
 
 module.exports = {
     crawler : (req, res) => {
@@ -15,7 +16,9 @@ module.exports = {
         // });
         crawler.on("fetchcomplete",function(queueItem, responseBuffer){
             let html = responseBuffer.toString()
-            //console.log(html)
+
+            const $ = cheerio.load(html)
+            console.log($.body)
 
             // console.log($(this).getAttribute('span').toString())
             // let elements = $(this).getElementsByClassName('div');
@@ -55,5 +58,74 @@ module.exports = {
 
 
         return  res.status(200).json({ msg: url })
+    },
+    crawlerWithCheerio : async (req, res) => {
+        const {url} = req.body
+        const pageHTML = await axios.get(url, {
+            headers: {
+                'Accept-Encoding': 'gzip, deflate, br',
+            },
+            //is the same as set the entire url
+        })
+        const htmlData = cheerio.load(pageHTML.data)
+
+        const link = new URL(url).host
+        console.log('Host: ', link)
+
+        let image = null
+        let name = null
+        let price = null
+
+        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text())
+        // console.log("----------------PRICE-------------------")
+        // console.log(htmlData('.css-1ycxqyf > div ').text())
+        // console.log("----------------Name-------------------")
+        // console.log(htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src'))
+
+        // //
+        // console.log("----------------IMAGE-------------------")
+        // image = htmlData('[data-testid="grid:gallery:image:wrapper:0"]').find('img').attr('src')
+        // console.log(image)
+        // return res.status(200).json({name: name, price : price, images : image})
+        switch (link){
+            case 'www.ahlens.se':
+                name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text()
+                image = htmlData('.jss167 span > img').attr('src')
+                price = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').text()
+                break
+            case 'www.magasin.dk':
+                name = htmlData('.js-productName').text()
+                price = htmlData('.js-productPrice > .price > span > span > span ').text()
+                image = htmlData('.productDetailsImage__image').attr('src')
+                break
+            case 'www.imerco.dk':
+                name = null
+                price = null
+                image = htmlData('.css-bjn8wh > div > div > img').attr('src')
+                break
+            case 'www.johnlewis.com':
+                name = htmlData('[data-testid="product:title"]').text()
+                price = htmlData('[data-testid="product:price"]').text()
+                image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
+                break
+            default:
+                return res.status(200).json({msg: url})
+        }
+        // console.log(htmlData('div[class="jss319"]').text())
+        // console.log("-----------------------------------")
+        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').html())
+        // console.log(htmlData('.jss155 > .jss152 > .jss229 > div:nth-child(4) > span').html())
+        // console.log(htmlData('div[class="jss167"]').find('span > img').attr('srcset'))
+        //............................
+        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text())
+        // console.log("----------------PRICE-------------------")
+        // console.log(htmlData('.css-1ycxqyf > div ').text())
+        // console.log("----------------Name-------------------")
+        // console.log(htmlData('.efs80uw3 > ul').html())
+        // //
+        // console.log("----------------IMAGE-------------------")
+        // image = htmlData('[data-testid="grid:gallery:image:wrapper:0"]').find('img').attr('src')
+        // console.log(image)
+        return res.status(200).json({name: name, price : price, images : image})
     }
 }

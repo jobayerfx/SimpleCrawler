@@ -12,6 +12,7 @@
   "author": "YUSUF",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.2.3",
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.12",
     "config": "^3.3.0",
