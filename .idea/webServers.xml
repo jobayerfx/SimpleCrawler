@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b0713d49-1bd7-48b9-9ee5-36dfc67a8aa8" name="CrawlerServer">
+        <fileTransfer rootFolder="/srv/www/api.crawl.wedsly.com/www/SimpleCrawler" accessType="SFTP" host="api.crawl.wedsly.com" port="22" sshConfigId="6d60c8d5-352e-49f8-b17e-afa57631c661" sshConfig="apicrawlwedslycom@api.crawl.wedsly.com:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

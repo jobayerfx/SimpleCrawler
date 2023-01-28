@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../../middleware/auth');
+const validator = require('../../app/Validator/validator');
 const Controller = require('../../app/Http/Controller/CrawlerController');
 
 const cors = require('cors');
@@ -8,10 +8,10 @@ router.use(cors());
 
 /**
  * @description Get Crawler URL
- * @method GET
+ * @method POST
  * @access Public
- * @api api/auth
+ *
  */
-router.get('/', Controller.crawler);
+router.post('/', validator.url, Controller.crawler);
 
-module.exports = router
+module.exports = router;

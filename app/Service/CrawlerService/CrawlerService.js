@@ -1,6 +1,7 @@
 const Crawler = require("simplecrawler");
 const cheerio = require("cheerio");
 const axios = require("axios");
+const {validationResult} = require('express-validator');
 
 module.exports = {
     crawler : (req, res) => {
@@ -60,6 +61,7 @@ module.exports = {
         return  res.status(200).json({ msg: url })
     },
     crawlerWithCheerio : async (req, res) => {
+
         const {url} = req.body
         const pageHTML = await axios.get(url, {
             headers: {
@@ -97,6 +99,7 @@ module.exports = {
                 name = htmlData('.js-productName').text()
                 price = htmlData('.js-productPrice > .price > span > span > span ').text()
                 image = htmlData('.productDetailsImage__image').attr('src')
+
                 break
             case 'www.imerco.dk':
                 name = null
