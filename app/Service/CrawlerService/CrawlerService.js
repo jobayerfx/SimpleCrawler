@@ -111,6 +111,11 @@ module.exports = {
                 price = htmlData('[data-testid="product:price"]').text()
                 image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
+            case 'www.amazon.com':
+                name = null
+                price = null
+                image = htmlData('.imgTagWrapper > img').attr('src') ?? null
+                break
             default:
                 return res.status(200).json({name: null, price : null, images : null, link: link})
         }
