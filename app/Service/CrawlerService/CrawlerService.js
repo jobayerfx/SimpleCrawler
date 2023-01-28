@@ -112,7 +112,7 @@ module.exports = {
                 image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
             default:
-                return res.status(200).json({msg: url})
+                return res.status(200).json({name: null, price : null, images : null})
         }
         // console.log(htmlData('div[class="jss319"]').text())
         // console.log("-----------------------------------")
