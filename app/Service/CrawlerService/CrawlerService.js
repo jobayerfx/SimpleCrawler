@@ -99,7 +99,7 @@ module.exports = {
                 name = htmlData('.js-productName').text()
                 price = htmlData('.js-productPrice > .price > span > span > span ').text()
                 image = htmlData('.productDetailsImage__image').attr('src')
-
+                price = price.replace(/^\n|\n$/g, '')
                 break
             case 'www.imerco.dk':
                 name = null
@@ -112,7 +112,7 @@ module.exports = {
                 image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
             default:
-                return res.status(200).json({name: null, price : null, images : null})
+                return res.status(200).json({name: null, price : null, images : null, link: link})
         }
         // console.log(htmlData('div[class="jss319"]').text())
         // console.log("-----------------------------------")
@@ -129,6 +129,6 @@ module.exports = {
         // console.log("----------------IMAGE-------------------")
         // image = htmlData('[data-testid="grid:gallery:image:wrapper:0"]').find('img').attr('src')
         // console.log(image)
-        return res.status(200).json({name: name, price : price, images : image})
+        return res.status(200).json({name: name, price : price, images : image, link: link})
     }
 }
