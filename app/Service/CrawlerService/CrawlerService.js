@@ -112,9 +112,30 @@ module.exports = {
                 image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
             case 'www.amazon.com':
-                name = null
-                price = null
-                image = htmlData('.imgTagWrapper > img').attr('src') ?? null
+                name = htmlData('#productTitle').text()
+                const price_one = htmlData('.apexPriceToPay > span').first().text()
+                const price_two = htmlData('.priceToPay > span').first().text()
+                price = price_one ? price_one : price_two
+                image = htmlData('.imgTagWrapper > img').attr('src')
+                break
+            case 'www.elgiganten.dk':
+                name = htmlData('.product-title').text()
+                price = htmlData('.price__value > span').first().text().replace('.-','')
+                let pd_image = htmlData('.swiper-slide > img').attr('src')
+                image = pd_image ? pd_image : null
+                break
+            case 'www.georgjensen.com':
+                name = htmlData('.product-detail > div > h1').text().replace(/^\n|\n$/g, '')
+                price = htmlData('.product-price > span').first().text().replace('DKK','').replace(/^\n|\n$/g, '')
+                let p_image = htmlData('.product-image-carousel > a > picture > img').attr('src')
+                image = p_image ? "https://www.georgjensen.com" + p_image : null
+                break
+            case 'www.sinnerup.dk':
+                name = htmlData('.item-name  > h1').text().replace(/^\n|\n$/g, '')
+                price = htmlData('.item-prices__value').text()
+                let ps_image = htmlData('.item-prices__value > a').html()
+                image = ps_image ? ps_image : null
+                console.log(image)
                 break
             default:
                 return res.status(200).json({name: null, price : null, images : null, link: link})
