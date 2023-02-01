@@ -119,9 +119,9 @@ module.exports = {
                 data.image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
             case 'www.amazon.com':
-                data.name = htmlData('#productTitle').text()
-                const price_one = htmlData('.apexPriceToPay > span').first().text()
-                const price_two = htmlData('.priceToPay > span').first().text()
+                data.name = htmlData('#productTitle').text().trim()
+                const price_one = htmlData('.apexPriceToPay > span').first().text().toString().trim()
+                const price_two = htmlData('.priceToPay > span').first().text().trim()
                 data.price = price_one ? price_one : price_two
                 data.image = htmlData('.imgTagWrapper > img').attr('src')
                 break
