@@ -146,10 +146,35 @@ module.exports = {
                 break
             case 'www.imerco.dk':
                 data.name = htmlData('.ezs9ur40 > span').text().toString().trim()
-                data.price = htmlData('.e1vpke3j1').text().toString().trim()
+                let im_prc_1 = htmlData('.css-1hti6gr').text().toString().trim()
+                let im_prc_2 = htmlData('.css-mc3fz4').text().toString().trim()
+                data.price = im_prc_1 ? im_prc_1 : im_prc_2
                 let temp_image = htmlData('.css-bjn8wh > div > div > img').attr('src')
                     .split('https://integration.imerco.dk/api').pop().trim()
                 data.image = 'https://integration.imerco.dk/api' + temp_image
+                break
+            case 'salling.dk':
+                data.name = htmlData('.product-page__title').text().toString().trim()
+                data.price = htmlData('.price__current-price').text().toString().trim()
+                let img_sal = htmlData('.product-page__slider > div > img').attr('src')
+                data.image = img_sal ? img_sal : null
+                data.currency = 'kr'
+                break
+            case 'www.kitchenone.dk':
+                data.name = htmlData("*[itemprop = 'name']").text().toString().trim()
+                data.price = htmlData("*[itemprop = 'price']").text().toString().trim()
+                let img_kit = htmlData('.basicData > div > div > div > img').attr('data-src')
+                data.image = img_kit ? img_kit : null
+                console.log(img_kit)
+                data.currency = 'kr'
+                break
+            case 'www.weber.com':
+                data.name = htmlData(".product-name").text().toString().trim()
+                data.price = htmlData(".price").first().text().toString().trim()
+                let img_weber = htmlData('.slick-slide').html()
+                data.image = img_weber ? img_weber : null
+                console.log(img_weber)
+                data.currency = 'kr'
                 break
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
