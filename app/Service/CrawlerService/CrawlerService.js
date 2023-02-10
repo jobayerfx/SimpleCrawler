@@ -72,34 +72,6 @@ module.exports = {
         const htmlData = cheerio.load(pageHTML.data)
 
         const link = new URL(url).host
-
-        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text())
-        // console.log("----------------PRICE-------------------")
-        // console.log(htmlData('.css-1ycxqyf > div ').text())
-        // console.log("----------------Name-------------------")
-        // console.log(htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src'))
-
-        // //
-        // console.log("----------------IMAGE-------------------")
-        // image = htmlData('[data-testid="grid:gallery:image:wrapper:0"]').find('img').attr('src')
-        // console.log(image)
-        // return res.status(200).json({name: name, price : price, images : image})
-
-        // console.log(htmlData('div[class="jss319"]').text())
-        // console.log("-----------------------------------")
-        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').html())
-        // console.log(htmlData('.jss155 > .jss152 > .jss229 > div:nth-child(4) > span').html())
-        // console.log(htmlData('div[class="jss167"]').find('span > img').attr('srcset'))
-        //............................
-        // console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text())
-        // console.log("----------------PRICE-------------------")
-        // console.log(htmlData('.css-1ycxqyf > div ').text())
-        // console.log("----------------Name-------------------")
-        // console.log(htmlData('.efs80uw3 > ul').html())
-        // //
-        // console.log("----------------IMAGE-------------------")
-        // image = htmlData('[data-testid="grid:gallery:image:wrapper:0"]').find('img').attr('src')
-        // console.log(image)
         let data = {name: null,  price : null, image : null, url: url, currency: null}
         switch (link){
             case 'www.ahlens.se':
@@ -165,6 +137,7 @@ module.exports = {
                 data.price = htmlData('span.price-value').text().toString().trim().match(/\d/g, '').join('')
                 data.image = 'https:'  + htmlData('.product-detail-main-image-container > img').attr('src').trim()
                 data.currency = htmlData('span.price-value').text().toString().trim().match(/[A-Za-z]/g).join("")
+                break
             case 'salling.dk':
                 data.name = htmlData('.product-page__title').text().toString().trim()
                 data.price = htmlData('.price__current-price').text().toString().trim()
@@ -191,9 +164,6 @@ module.exports = {
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
         }
-
-
         return res.status(200).json({error: false, message: 'Gift List', data})
-
     },
 }
