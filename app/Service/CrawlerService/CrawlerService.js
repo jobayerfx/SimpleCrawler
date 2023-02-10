@@ -153,6 +153,18 @@ module.exports = {
                     .split('https://integration.imerco.dk/api').pop().trim()
                 data.image = 'https://integration.imerco.dk/api' + temp_image
                 break
+
+            case 'www.ikea.com':
+                data.name = htmlData('span.pip-header-section__title--big.notranslate').text().toString().trim()
+                data.price = htmlData('span.pip-temp-price__integer').text().toString().trim().replace(':-', "")
+                data.image = htmlData('span.pip-media-grid__media-image > img').attr('src').trim()
+                data.currency = null
+                break
+            case 'www2.hm.com':
+                data.name = htmlData('#js-product-name div h1').text().toString().trim()
+                data.price = htmlData('span.price-value').text().toString().trim().match(/\d/g, '').join('')
+                data.image = 'https:'  + htmlData('.product-detail-main-image-container > img').attr('src').trim()
+                data.currency = htmlData('span.price-value').text().toString().trim().match(/[A-Za-z]/g).join("")
             case 'salling.dk':
                 data.name = htmlData('.product-page__title').text().toString().trim()
                 data.price = htmlData('.price__current-price').text().toString().trim()
@@ -183,5 +195,5 @@ module.exports = {
 
         return res.status(200).json({error: false, message: 'Gift List', data})
 
-    }
+    },
 }
