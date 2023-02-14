@@ -250,6 +250,34 @@ module.exports = {
                     .attr('src')
                 data.currency = 'usd'
                 break
+            case 'www.cervera.se':
+                data.name = htmlData(".ProductTopInfo_productTitle__YbnOY").text().toString().trim()
+                data.price = htmlData(".ProductPrice_salePrice___aDz3.ProductPrice_root__QRibA").first().text().toString().trim().match(/\d/g, '').join('')
+                let imgCre = htmlData('.ProductImageSlider_productImage__yQnyM').attr('src').trim()
+                data.image = imgCre ? imgCre : null
+                data.currency = htmlData(".ProductPrice_salePrice___aDz3.ProductPrice_root__QRibA").first().text().toString().trim().match(/[A-Za-z]/g).join("")
+                break
+            case 'designtorget.se':
+                data.name = htmlData("#product-addtocart-button").attr('data-name').trim()
+                data.price = htmlData("#product-addtocart-button").attr('data-price').trim()
+                let imgdesi = htmlData('.c-product-gallery__img.c-product-gallery__img--main').attr('src').trim()
+                data.image = imgdesi ? imgdesi : null
+                data.currency = htmlData(".price").first().text().toString().trim().match(/[A-Za-z]/g).join("")
+                break
+            case 'www.granit.com':
+                data.name = htmlData("h1.page-title span").text().toString().trim()
+                data.price = htmlData(".price-container .price-wrapper span.price").first().text().toString().trim().match(/\d/g, '').join('')
+                let imgGran = htmlData('.gallery-placeholder__image').attr('src').trim()
+                data.image = imgGran ? imgGran : null
+                data.currency = htmlData(".price-container .price-wrapper span.price").first().text().toString().trim().match(/[A-Za-z]/g).join('')
+                break
+            case 'www.illumsbolighus.dk':
+                data.name = htmlData("h1.product-name").text().toString().trim()
+                data.price = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/\d/g, '').join('')
+                let imgib = htmlData('.d-block.img-fluid.lazyload').attr('data-src').trim()
+                data.image = imgib ? imgib : null
+                data.currency = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/[A-Za-z]/g).join('')
+                break
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
         }
