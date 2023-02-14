@@ -84,11 +84,11 @@ module.exports = {
                 data.price = htmlData('.js-productPrice > .price > span > span > span ').text().replace(/^\n|\n$/g, '')
                 data.image = htmlData('.productDetailsImage__image').attr('src')
                 break
-            case 'www.johnlewis.com':
-                data.name = htmlData('[data-testid="product:title"]').text()
-                data.price = htmlData('[data-testid="product:price"]').text().replace('£','')
-                data.currency = 'EUR'
-                data.image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
+            // case 'www.johnlewis.com':
+            //     data.name = htmlData('[data-testid="product:title"]').text()
+            //     data.price = htmlData('[data-testid="product:price"]').text().replace('£','')
+            //     data.currency = 'EUR'
+            //     data.image = htmlData('.Layout_image__1LfSG > div > div > div > div > img').attr('src') ?? null
                 break
             case 'www.amazon.com':
                 data.name = htmlData('#productTitle').text().trim()
@@ -194,6 +194,61 @@ module.exports = {
                 data.price = bog_price ? bog_price : null
                 data.image = bogUrl ? bogUrl : null
                 data.currency = 'DKK'
+                break
+            case 'www.dunelm.com':
+                data.name = htmlData('[data-testid="product-title"]').text()
+                data.price = htmlData('[data-testid="product-price"]').text()
+                data.image = htmlData('[data-testid="mainImage"]').attr('src')
+                data.currency = 'eur'
+                break
+            case 'www.johnlewis.com':
+                data.name = htmlData('[data-cy="product-header-block"]')
+                    .find('h1')
+                    .text()
+
+                console.log('name: ', data.name)
+                data.price = htmlData('[data-cy="product-price-title"]')
+                    .find('span')
+                    .text()
+                data.image = htmlData('.slick-slide > div > div > img').attr('src')
+                data.currency = 'eur'
+                break
+            case 'www.wayfair.com':
+                data.name = htmlData('[data-hb-id="Heading"]').text()
+                data.price = htmlData('[data-enzyme-id="PriceBlock"]')
+                    .find('div > div > span')
+                    .text()
+                // data.image = htmlData('.slick-slide > div > div > img').attr('src')
+                data.currency = 'usd'
+                break
+
+            case 'www.williams-sonoma.com':
+                data.name = htmlData('[data-test-id="product-title"]').text()
+                data.price = htmlData('[data-test-id="priceLabel"]')
+                    .find('.amount')
+                    .text()
+                if (!data.price) {
+                    data.price = htmlData('[data-test-id="priceLabel"]')
+                        .find('.amount')
+                        .text()
+                }
+                data.image = htmlData('[data-test-id="magnifier"]')
+                    .find('div > div > div > div > img')
+                    .attr('src')
+                data.currency = 'usd'
+                break
+
+            case 'www.bedbathandbeyond.com':
+                data.name = htmlData('[data-ssr="prodDetSsr.data.PRODUCT_DETAILS"]')
+                    .find('div.amp-hidden > h1')
+                    .text()
+                data.price = htmlData('[data-test-id="priceLabel"]')
+                    .find('.amount')
+                    .text()
+                data.image = htmlData('[data-test-id="magnifier"]')
+                    .find('div > div > div > div > img')
+                    .attr('src')
+                data.currency = 'usd'
                 break
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
