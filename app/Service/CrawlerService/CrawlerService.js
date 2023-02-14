@@ -1,6 +1,6 @@
 const Crawler = require("simplecrawler");
 const cheerio = require("cheerio");
-const axios = require("axios");
+const axios = require('axios');
 const {validationResult} = require('express-validator');
 
 module.exports = {
@@ -154,12 +154,46 @@ module.exports = {
                 data.currency = 'kr'
                 break
             case 'www.weber.com':
-                data.name = htmlData(".product-name").text().toString().trim()
-                data.price = htmlData(".price").first().text().toString().trim()
-                let img_weber = htmlData('.slick-slide').html()
-                data.image = img_weber ? img_weber : null
+                let w_name = htmlData(".product-name").text().toString()
+                let w_price = htmlData(".price").first().text().toString()
+                let img_weber = htmlData('.main > div > img').attr('src')
+                data.image = img_weber ? img_weber.trim() : null
+                data.price = w_price ? w_price.trim() : null
+                data.name = w_name ? w_name.trim() : null
                 console.log(img_weber)
+                data.currency = 'DKK'
+                break
+            case 'paustian.com':
+                data.name = htmlData(".m-product-title").text().toString().trim()
+                data.price = htmlData(".m-product-price").first().text().toString().trim()
+                const firstImage = htmlData('.item').first().attr('img','src').html();
+                const $ = cheerio.load(firstImage);
+                const imageUrl = $('img').attr('data-src');
+                console.log(imageUrl);
+                data.image = imageUrl ? imageUrl : null
+                data.currency = 'DKK'
+                break
+            case 'www.bauhaus.dk':
+                data.name = htmlData(".hyphens-auto").text().toString().trim()
+                data.price = htmlData(".price").first().text().toString().trim()
+                const firstbauhausImage = htmlData('.item').first().attr('img','src').html();
+                const d = cheerio.load(firstbauhausImage);
+                const imagebauhausUrl = htmlData('.product-info-main img').attr('src');
+                console.log(imagebauhausUrl);
+                data.image = imagebauhausUrl ? imagebauhausUrl : null
                 data.currency = 'kr'
+                break
+            case 'www.bog-ide.dk':
+                let bog_name = htmlData(".css-weczj-ProductHeaderTitle").text().toString()
+                let bog_price = htmlData(".css-tspljm-Price").first().text().toString()
+                // const bogImage = htmlData('.css-1jtmlf3-StyledImage').attr('img','src').html();
+                const bogUrl = htmlData('.css-wfazeb-StyledProductMedia').eq(2).attr('img', 'src').text();
+                console.log(bogUrl)
+
+                data.name = bog_name ? bog_name : null
+                data.price = bog_price ? bog_price : null
+                data.image = bogUrl ? bogUrl : null
+                data.currency = 'DKK'
                 break
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
