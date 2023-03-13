@@ -243,8 +243,8 @@ module.exports = {
                     break
 
                 case 'www.bedbathandbeyond.com':
-                    data.name = htmlData('.prodTitle').text()
-                    data.price = htmlData('.ratingPosCont').text()
+                    data.name = htmlData('.first').html().toString()
+                    data.price = htmlData('.s12').html()
                     data.image = htmlData('[data-test-id="magnifier"]')
                         .find('div > div > div > div > img')
                         .attr('src')
