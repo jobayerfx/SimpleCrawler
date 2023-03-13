@@ -75,9 +75,10 @@ module.exports = {
         let data = {name: null,  price : null, image : null, url: url, currency: null}
         switch (link){
             case 'www.ahlens.se':
-                data.name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text()
+                data.name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text().trim()
                 data.image = htmlData('.jss167 span > img').attr('src')
                 data.price = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').text()
+                console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_price"] > div').html())
                 break
             case 'www.magasin.dk':
                 data.name = htmlData('.js-productName').text()
@@ -277,6 +278,19 @@ module.exports = {
                 let imgib = htmlData('.d-block.img-fluid.lazyload').attr('data-src').trim()
                 data.image = imgib ? imgib : null
                 data.currency = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/[A-Za-z]/g).join('')
+                break
+            case 'www.amazon.de':
+                data.name = htmlData("#productTitle").text().toString().trim()
+                let price1 = htmlData("#price").text().toString().trim()
+                let price2 = htmlData("#price_inside_buybox").text().toString().trim()
+                let price3 = htmlData(".apexPriceToPay > span").eq(1).text().toString().trim()
+                let img_am = htmlData("#imgBlkFront").attr('src')
+                let img_am2 = htmlData("#landingImage").attr('src')
+                let img_am3 = htmlData("#imgTagWrapperId").attr('src')
+                let img_am4 = htmlData("#imgTagWrapperId > div").attr('src')
+                data.image = img_am ? img_am : img_am2 ? img_am2 : img_am3 ? img_am3 : img_am4 ? img_am4 : null
+                data.price = price1 ? price1 : price2 ? price2 : price3 ? price3 : null
+                // data.currency = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/[A-Za-z]/g).join('')
                 break
             default:
                 return res.status(200).json({error: false, message: 'Gift List', data})
