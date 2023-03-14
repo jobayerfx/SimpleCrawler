@@ -73,9 +73,7 @@ module.exports = {
             })
             const htmlData = cheerio.load(pageHTML.data)
 
-
             const link = new URL(url).host
-
             switch (link){
                 case 'www.ahlens.se':
                     data.name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text().trim()
@@ -294,12 +292,55 @@ module.exports = {
                     data.price = price1 ? price1 : price2 ? price2 : price3 ? price3 : price4 ? price4 : null
                     // data.currency = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/[A-Za-z]/g).join('')
                     break
+                case 'www.breuninger.com':
+                    data.name = htmlData('.shop-body').text()
+                    data.image = htmlData('div').text()
+                    data.price = htmlData('.productPrice').text()
+                    break
+                case 'www.thewhitecompany.com':
+                    data.name = htmlData('.product-details__name').text()
+                    data.image = htmlData('div').text()
+                    data.price = htmlData('.productPrice').text()
+                    break
+                case 'www.anthropologie.com':
+                    data.name = htmlData('.c-pwa-product-meta-heading').text()
+                    data.image = htmlData('div').text()
+                    data.price = htmlData('.productPrice').text()
+                    break
+                case 'https://www.amara.com':
+                    data.name = htmlData('.c-pwa-product-meta-heading').text()
+                    data.image = htmlData('div').text()
+                    data.price = htmlData('.productPrice').text()
+                    break
+                case 'www.oliverbonas.com':
+                    // data.name = htmlData('.h3').text()
+                    let oli_name_1 = htmlData('.pos-relative > div > div > div > div > h1').text()
+                    let oli_image_1 = htmlData('.rf .dynamic-image').attr('src')
+                    let oli_price_1 = htmlData('.price > span').text()
+                    const oli = cheerio.load(htmlData('.product-media__image').html())
+                    const imageUrla = oli('.dynamic-image').attr('src');
+                    data.name = oli_name_1 ? oli_name_1 : null
+                    data.image = imageUrla ? imageUrla : null
+                    data.price = oli_price_1 ? oli_price_1 : null
+                    break
+                case 'www.grahamandgreen.co.uk':
+                    // data.name = htmlData('.h3').text()
+                    let gra_name_1 = htmlData('.page-title > h1').text().trim()
+                    let gra_image_1 = htmlData('.gallery__image').attr('src')
+                    let gra_price_1 = htmlData('#product-price-30180').text().trim()
+
+                    data.name = gra_name_1 ? gra_name_1 : null
+                    data.image = gra_image_1 ? gra_image_1 : null
+                    data.price = gra_price_1 ? gra_price_1 : null
+
+                    console.log(htmlData('.product > div > div > div > div').html())
+                    break
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
             }
-            return res.status(200).json({error: false, message: 'Gift List', data})
+            return res.status(200).json({error: false, message: 'List', data})
         } catch (e) {
-            return res.status(200).json({error: false, message: 'Gift List', data})
+            return res.status(200).json({error: false, message: e.message, data})
         }
 
     },
