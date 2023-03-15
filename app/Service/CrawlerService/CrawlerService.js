@@ -63,7 +63,7 @@ module.exports = {
     crawlerWithCheerio : async (req, res) => {
 
         const {url} = req.body
-        let data = {name: null,  price : null, image : null, url: url, currency: null}
+        let data = {name: null, price : null, image : null, url: url, currency: null}
         try {
             const pageHTML = await axios.get(url, {
                 headers: {
@@ -332,8 +332,64 @@ module.exports = {
                     data.name = gra_name_1 ? gra_name_1 : null
                     data.image = gra_image_1 ? gra_image_1 : null
                     data.price = gra_price_1 ? gra_price_1 : null
+                    break
+                case 'www.libertylondon.com':
+                    data.name = htmlData('.product-details > h1').text().trim()
+                    data.price = htmlData('.prices > .price').text().trim()
+                    data.image = htmlData('.primary-product-image > a > img').attr('src')
+                    break
+                case 'www.harrods.com':
+                    data.name = htmlData('[data-test="buyingControl-brand"]').text().trim()
+                    data.price = htmlData('[data-test="product-price"]').text().trim()
+                    data.image = htmlData('[data-test="product-image"]').attr('src')
+                    break
+                case 'www.kostaboda.com':
+                    let ko_name = htmlData('.css-19qzjun').text().trim()
+                    let ko_price = htmlData('[data-test="product-price"]').text().trim()
+                    let ko_image = htmlData('.css-1unf33q > div > img').attr('data-src')
 
-                    console.log(htmlData('.product > div > div > div > div').html())
+                    data.name = ko_name
+                    data.price = ko_price
+                    data.image = ko_image ? ko_image : null
+                    break
+
+                case 'royaldesign.se':
+                    let ro_name = htmlData('.css-oo4wqa-ProductDetails > h1').text().trim()
+                    let ro_price = htmlData('.css-oo4wqa-ProductDetails > .css-13a3qqo > div > div > .css-d7o27d').text()
+                    let ro_image = htmlData('.css-61q2qj > img').attr('src')
+                    data.name = ro_name ? ro_name : null
+                    data.price = ro_price ? ro_price : null
+                    data.image = ro_image ? ro_image : null
+                    break
+                case 'www.nk.se':
+                    let nk_name = htmlData('.a5 > a').text().trim()
+                    let nk_price = htmlData('.jh > div > div > div > a > span > span').eq(0).text()
+                    let nk_image = htmlData('.r').attr('srcset')
+
+                    // console.log(htmlData('img').eq(6).attr('src'))
+                    data.name = nk_name ? nk_name : null
+                    data.price = nk_price ? nk_price : null
+                    data.image = nk_image ? nk_image : null
+                    break
+                case 'www.svenskttenn.com':
+                    let sve_name = htmlData('.c-product-detail__heading').text().replace(/(\r\n|\n|\r|\t)/gm, "").trim()
+                    let sve_price = htmlData('.c-product-detail__price--current').text().trim()
+                    let sve_image = htmlData('.easyzoom-trigger img').attr('src')
+
+                    // console.log(htmlData('img').eq(6).attr('src'))
+                    data.name = sve_name ? sve_name: null
+                    data.price = sve_price ? sve_price : null
+                    data.image = sve_image ? 'www.svenskttenn.com' + sve_image : null
+                    break
+                case 'artilleriet.se':
+                    let art_name = htmlData('.Product-title').text().trim()
+                    let art_price = htmlData('.Product-price').text().trim()
+                    let art_image = htmlData('.Product-image > span  img').attr('src')
+
+                    // console.log(htmlData('.Product-images').eq(1).find('img').attr('src'))
+                    data.name = art_name ? art_name: null
+                    data.price = art_price ? art_price : null
+                    data.image = art_image ? art_image : null
                     break
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
