@@ -292,11 +292,11 @@ module.exports = {
                     data.price = price1 ? price1 : price2 ? price2 : price3 ? price3 : price4 ? price4 : null
                     // data.currency = htmlData(".price .non-member-promo-price .sales span.value").text().toString().trim().match(/[A-Za-z]/g).join('')
                     break
-                case 'www.breuninger.com':
-                    data.name = htmlData('.shop-body').text()
-                    data.image = htmlData('div').text()
-                    data.price = htmlData('.productPrice').text()
-                    break
+                // case 'www.breuninger.com':
+                //     data.name = htmlData('.shop-body').text()
+                //     data.image = htmlData('div').text()
+                //     data.price = htmlData('.productPrice').text()
+                //     break
                 case 'www.thewhitecompany.com':
                     data.name = htmlData('.product-details__name').text()
                     data.image = htmlData('div').text()
@@ -390,6 +390,65 @@ module.exports = {
                     data.name = art_name ? art_name: null
                     data.price = art_price ? art_price : null
                     data.image = art_image ? art_image : null
+                    break
+                case 'www.galeria.de':
+                    let gal_name = htmlData('[data-testid="productTitle"]').text()
+                    let gal_price = htmlData('.Product-price').text().trim()
+                    let gal_image = htmlData('.Product-image > span  img').attr('src')
+
+                    // console.log(htmlData('.Product-images').eq(1).find('img').attr('src'))
+                    data.name = gal_name ? gal_name: null
+                    data.price = gal_price ? gal_price : null
+                    data.image = gal_image ? gal_image : null
+                    break
+                case 'www.breuninger.com':
+                    let bre_name = htmlData('.ents-brand-heading-bold').text()
+                    let bre_price = htmlData('.Product-price').text().trim()
+                    let bre_image = htmlData('img').attr('src')
+
+                    data.name = bre_name ? bre_name: null
+                    data.price = bre_price ? bre_price : null
+                    data.image = bre_image ? bre_image : null
+                    break
+
+                case 'www.manufactum.de':
+                    let manu_name = htmlData('.se-oFQyi_m8').eq(0).text()
+                    let manu_price = htmlData('.se-vWoGiX5M > .se-Wcfg4ucA').eq(0).text().trim()
+                    let manu_image = htmlData('#firstImage').attr('src')
+                    data.name = manu_name ? manu_name: null
+                    data.price = manu_price ? manu_price : null
+                    data.image = manu_image ? manu_image : null
+                    break
+
+                case 'www.globus-baumarkt.de':
+                    let glo_name = htmlData('.product-detail-name').eq(0).text().trim()
+                    let glo_price = htmlData('.with-list-price').text().trim()
+                    let glo_image = htmlData('.thumb-isPdpGallery > source').attr('srcset')
+
+                    console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
+                    data.name = glo_name ? glo_name: null
+                    data.price = glo_price ? glo_price : null
+                    data.image = glo_image ? glo_image : null
+                    break
+                case 'www.westwing.de':
+                    let wes_name = htmlData('.product-detail-name').eq(0).text().trim()
+                    let wes_price = htmlData('.with-list-price').text().trim()
+                    let wes_image = htmlData('.thumb-isPdpGallery > source').attr('srcset')
+
+                    console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
+                    data.name = wes_name ? wes_name: null
+                    data.price = wes_price ? wes_price : null
+                    data.image = wes_image ? wes_image : null
+                    break
+                case 'www.mydays.de':
+                    let myd_name = htmlData('.c-producthl__headline').eq(0).text().trim()
+                    let myd_price = htmlData('.product__facts__voucherinfo__price').text().trim().replace(/(\r\n|\n|\r|\t)/gm, "")
+                    let myd_image = htmlData('.slides > uk > li').eq(1).attr('src')
+
+                    console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
+                    data.name = myd_name ? myd_name: null
+                    data.price = myd_price ? myd_price : null
+                    data.image = myd_image ? myd_image : null
                     break
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
