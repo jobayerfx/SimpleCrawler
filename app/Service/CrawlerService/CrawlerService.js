@@ -431,11 +431,11 @@ module.exports = {
                     data.image = glo_image ? glo_image : null
                     break
                 case 'www.westwing.de':
-                    let wes_name = htmlData('.product-detail-name').eq(0).text().trim()
+                    let wes_name = htmlData('.campaign-summary__title').text().trim()
                     let wes_price = htmlData('.with-list-price').text().trim()
                     let wes_image = htmlData('.thumb-isPdpGallery > source').attr('srcset')
 
-                    console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
+                    // console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
                     data.name = wes_name ? wes_name: null
                     data.price = wes_price ? wes_price : null
                     data.image = wes_image ? wes_image : null
@@ -449,6 +449,16 @@ module.exports = {
                     data.name = myd_name ? myd_name: null
                     data.price = myd_price ? myd_price : null
                     data.image = myd_image ? myd_image : null
+                    break
+                case 'www.westwingnow.de':
+                    let west_name = htmlData('.ProductInfo__ProductTitle-appshell__sc-195uwu2-4').text().trim()
+                    let west_price = htmlData('.ProductInfo__ProductPrice-appshell__sc-195uwu2-6 > span').text().trim()
+                    let west_image = htmlData('.ww-uikit_HorizontalScrollableSnap_lf8e7kwf-sc-zvm6t4 > div:nth-child(2) > picture > img').attr('src')
+
+                    // console.log(htmlData('.ww-uikit_HorizontalScrollableSnap_lf8e7kwf-sc-zvm6t4 > div:nth-child(2) > picture > img').attr('src'))
+                    data.name = west_name ? west_name: null
+                    data.price = west_price ? west_price : null
+                    data.image = west_image ? west_image : null
                     break
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
