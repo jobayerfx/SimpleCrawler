@@ -431,23 +431,21 @@ module.exports = {
                     data.image = glo_image ? glo_image : null
                     break
                 case 'www.westwing.de':
-                    let wes_name = htmlData('.campaign-summary__title').text().trim()
+                    let wes_name = htmlData('.campaign-overview__content').text().trim()
                     let wes_price = htmlData('.with-list-price').text().trim()
                     let wes_image = htmlData('.thumb-isPdpGallery > source').attr('srcset')
 
-                    // console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
                     data.name = wes_name ? wes_name: null
                     data.price = wes_price ? wes_price : null
                     data.image = wes_image ? wes_image : null
                     break
                 case 'www.mydays.de':
                     let myd_name = htmlData('.c-producthl__headline').eq(0).text().trim()
-                    let myd_price = htmlData('.product__facts__voucherinfo__price').text().trim().replace(/(\r\n|\n|\r|\t)/gm, "")
-                    let myd_image = htmlData('.slides > uk > li').eq(1).attr('src')
-
-                    console.log(htmlData('.card-body > .tab-content > .product-detail-price-container').html())
+                    let myd_price_1 = htmlData('.product__facts__voucherinfo__price').text().trim().replace(/(\r\n|\n|\r|\t)/gm, "")
+                    let myd_price_2 = htmlData('.c-mbvoucher__pricebox > span').text().trim()
+                    let myd_image =htmlData('.slides > li > img').eq(0).attr('src')
                     data.name = myd_name ? myd_name: null
-                    data.price = myd_price ? myd_price : null
+                    data.price = myd_price_1 ? myd_price_1 : myd_price_2 ? myd_price_2 : null
                     data.image = myd_image ? myd_image : null
                     break
                 case 'www.westwingnow.de':
@@ -459,6 +457,35 @@ module.exports = {
                     data.name = west_name ? west_name: null
                     data.price = west_price ? west_price : null
                     data.image = west_image ? west_image : null
+                    break
+                case 'www.connox.de':
+                    let conn_name = htmlData('.product-details > h1').text().trim()
+                    let conn_price_1 = htmlData('.product-price > div > span > s').text().trim()
+                    let conn_price_2 = htmlData('.product-price > div > span > span').text().trim()
+                    let conn_image = htmlData('.product-gallery > div > div > div > a').attr('href')
+
+                    data.name = conn_name ? conn_name: null
+                    data.price = conn_price_2 ? conn_price_2 : conn_price_1 ? conn_price_1 : null
+                    data.image = conn_image ? conn_image : null
+                    break
+                case 'www.porzellantreff.de':
+                    let porz_name = htmlData('.product-name > h1').text().trim()
+                    let porz_price_1 = htmlData('.product-price > div > span > s').text().trim()
+                    let porz_price_2 = htmlData('.product-price > div > span > span').text().trim()
+                    let porz_image = htmlData('.product-gallery > div > div > div > a').attr('href')
+
+                    data.name = porz_name ? porz_name: null
+                    data.price = porz_price_2 ? porz_price_2 : porz_price_1 ? porz_price_1 : null
+                    data.image = porz_image ? porz_image : null
+                    break
+                case 'www.butlers.com':
+                    let butle_name = htmlData('.product-main_single__title > span').eq(0).text().trim()
+                    let butle_price_1 = htmlData('.product__price').text().trim()
+                    let butle_image = htmlData('.product-image-main > div > img').attr('data-photoswipe-src').replace(/^\/{2}/, "")
+
+                    data.name = butle_name ? butle_name: null
+                    data.price = butle_price_1 ? butle_price_1 : null
+                    data.image = butle_image ? 'https://' + butle_image : null
                     break
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
