@@ -78,13 +78,21 @@ module.exports = {
                 case 'www.ahlens.se':
                     data.name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text().trim()
                     data.image = htmlData('.jss167 span > img').attr('src')
-                    data.price = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').text()
-                    console.log(htmlData('[data-testid="ProductDetailsBlockTestIds_price"] > div').html())
+                    let ahl_prc_1 = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').html()
+
+                    data.price = ahl_prc_1 ? ahl_prc_1 : 0
+                    // console.log()
+                    // const htm = htmlData('.MuiGrid-container > div:nth-child(4)').html();
+                    // const pp  = cheerio.load(htm)
+                    // const price = pp('.jss635').text().trim();
+                    // console.log(price ? price : 0)
                     break
                 case 'www.magasin.dk':
                     data.name = htmlData('.js-productName').text()
-                    data.price = htmlData('.js-productPrice > .price > span > span > span ').text().replace(/^\n|\n$/g, '')
+                    let maga_pri_1 = htmlData('.js-productPrice > .price > span > span > span ').text().replace(/^\n|\n$/g, '')
                     data.image = htmlData('.productDetailsImage__image').attr('src')
+                    let maga_pri_2 = htmlData('.js-productPrice > div > div > div > .goodie-price__value ').text().replace(/^\n|\n$/g, '')
+                    data.price = maga_pri_2 ? maga_pri_2 : maga_pri_1
                     break
                     // case 'www.johnlewis.com':
                     //     data.name = htmlData('[data-testid="product:title"]').text()
@@ -364,7 +372,7 @@ module.exports = {
                 case 'www.nk.se':
                     let nk_name = htmlData('.a5 > a').text().trim()
                     let nk_price = htmlData('.jh > div > div > div > a > span > span').eq(0).text()
-                    let nk_image = htmlData('.r').attr('srcset')
+                    let nk_image = htmlData('.dp > div > div > img').attr('src')
 
                     // console.log(htmlData('img').eq(6).attr('src'))
                     data.name = nk_name ? nk_name : null
