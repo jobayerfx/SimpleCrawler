@@ -78,8 +78,7 @@ module.exports = {
                 case 'www.ahlens.se':
                     data.name = htmlData('[data-testid="ProductDetailsBlockTestIds_name"]').text().trim()
                     data.image = htmlData('.jss167 span > img').attr('src')
-                    let ahl_prc_1 = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').html()
-
+                    let ahl_prc_1 = htmlData('[data-testid="ProductDetailsBlockTestIds_price"]').text()
                     data.price = ahl_prc_1 ? ahl_prc_1 : 0
                     // console.log()
                     // const htm = htmlData('.MuiGrid-container > div:nth-child(4)').html();
@@ -135,7 +134,6 @@ module.exports = {
                         .split('https://integration.imerco.dk/api').pop().trim()
                     data.image = 'https://integration.imerco.dk/api' + temp_image
                     break
-
                 case 'www.ikea.com':
                     data.name = htmlData('span.pip-header-section__title--big.notranslate').text().toString().trim()
                     data.price = htmlData('span.pip-temp-price__integer').text().toString().trim().replace(':-', "")
@@ -196,13 +194,12 @@ module.exports = {
                 case 'www.bog-ide.dk':
                     let bog_name = htmlData(".css-weczj-ProductHeaderTitle").text().toString()
                     let bog_price = htmlData(".css-tspljm-Price").first().text().toString()
-                    // const bogImage = htmlData('.css-1jtmlf3-StyledImage').attr('img','src').html();
-                    const bogUrl = htmlData('.css-wfazeb-StyledProductMedia').eq(2).attr('img', 'src').text();
-                    console.log(bogUrl)
-
+                    const bogUrl = htmlData('.css-wfazeb-StyledProductMedia > div > div > div').attr('img','src').text();
+                    const css = cheerio.load(bogUrl)
+                    let ppps = css('img').eq(0).attr('src')
                     data.name = bog_name ? bog_name : null
                     data.price = bog_price ? bog_price : null
-                    data.image = bogUrl ? bogUrl : null
+                    data.image = ppps ? ppps : null
                     data.currency = 'DKK'
                     break
                 case 'www.dunelm.com':
@@ -215,8 +212,6 @@ module.exports = {
                     data.name = htmlData('[data-cy="product-header-block"]')
                         .find('h1')
                         .text()
-
-                    console.log('name: ', data.name)
                     data.price = htmlData('[data-cy="product-price-title"]')
                         .find('span')
                         .text()
@@ -231,7 +226,6 @@ module.exports = {
                     // data.image = htmlData('.slick-slide > div > div > img').attr('src')
                     data.currency = 'usd'
                     break
-
                 case 'www.williams-sonoma.com':
                     data.name = htmlData('[data-test-id="product-title"]').text()
                     data.price = htmlData('[data-test-id="priceLabel"]')
@@ -247,7 +241,6 @@ module.exports = {
                         .attr('src')
                     data.currency = 'usd'
                     break
-
                 case 'www.bedbathandbeyond.com':
                     data.name = htmlData('.first').html().toString()
                     data.price = htmlData('.s12').html()
@@ -360,7 +353,6 @@ module.exports = {
                     data.price = ko_price
                     data.image = ko_image ? ko_image : null
                     break
-
                 case 'royaldesign.se':
                     let ro_name = htmlData('.css-oo4wqa-ProductDetails > h1').text().trim()
                     let ro_price = htmlData('.css-oo4wqa-ProductDetails > .css-13a3qqo > div > div > .css-d7o27d').text()
@@ -370,11 +362,17 @@ module.exports = {
                     data.image = ro_image ? ro_image : null
                     break
                 case 'www.nk.se':
-                    let nk_name = htmlData('.a5 > a').text().trim()
-                    let nk_price = htmlData('.jh > div > div > div > a > span > span').eq(0).text()
+
+                    let dd = htmlData('#content-container > main > div:nth-child(2) > .h3').html()
+                    let lls = cheerio.load(dd)
+                    let nk_name = lls('div:nth-child(1) > div > div > h1').text()
+                    let nk_price = lls('div:nth-child(1) > div > div > span').eq(0).text()
+
                     let nk_image = htmlData('.dp > div > div > img').attr('src')
 
-                    // console.log(htmlData('img').eq(6).attr('src'))
+                    let shas = lls('div:nth-child(1) > div').html()
+                    console.log(shas)
+
                     data.name = nk_name ? nk_name : null
                     data.price = nk_price ? nk_price : null
                     data.image = nk_image ? nk_image : null
