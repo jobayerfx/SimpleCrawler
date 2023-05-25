@@ -242,11 +242,11 @@ module.exports = {
                     data.currency = 'usd'
                     break
                 case 'www.bedbathandbeyond.com':
-                    data.name = htmlData('.first').html().toString()
-                    data.price = htmlData('.s12').html()
-                    data.image = htmlData('[data-test-id="magnifier"]')
-                        .find('div > div > div > div > img')
-                        .attr('src')
+                    console.log('bedbathandbeyond.com');
+                    data.name = htmlData('h1.prodTitle').text().trim()
+                    // data.price = htmlData('.s12').html()
+                    // data.image = htmlData('[data-test-id="magnifier"]')
+                    //     .find('div > div > div > div > img').attr('src')
                     data.currency = 'usd'
 
                     break
@@ -361,22 +361,22 @@ module.exports = {
                     data.price = ro_price ? ro_price : null
                     data.image = ro_image ? ro_image : null
                     break
-                case 'www.nk.se':
+                // case 'www.nk.se':
 
-                    let dd = htmlData('#content-container > main > div:nth-child(2) > .h3').html()
-                    let lls = cheerio.load(dd)
-                    let nk_name = lls('div:nth-child(1) > div > div > h1').text()
-                    let nk_price = lls('div:nth-child(1) > div > div > span').eq(0).text()
+                //     let dd = htmlData('#content-container > main > div:nth-child(2) > .h3').html()
+                //     let lls = cheerio.load(dd)
+                //     let nk_name = lls('div:nth-child(1) > div > div > h1').text()
+                //     let nk_price = lls('div:nth-child(1) > div > div > span').eq(0).text()
 
-                    let nk_image = htmlData('.dp > div > div > img').attr('src')
+                //     let nk_image = htmlData('.dp > div > div > img').attr('src')
 
-                    let shas = lls('div:nth-child(1) > div').html()
-                    console.log(shas)
+                //     let shas = lls('div:nth-child(1) > div').html()
+                //     console.log(shas)
 
-                    data.name = nk_name ? nk_name : null
-                    data.price = nk_price ? nk_price : null
-                    data.image = nk_image ? nk_image : null
-                    break
+                //     data.name = nk_name ? nk_name : null
+                //     data.price = nk_price ? nk_price : null
+                //     data.image = nk_image ? nk_image : null
+                //     break
                 case 'www.svenskttenn.com':
                     let sve_name = htmlData('.c-product-detail__heading').text().replace(/(\r\n|\n|\r|\t)/gm, "").trim()
                     let sve_price = htmlData('.c-product-detail__price--current').text().trim()
@@ -493,12 +493,92 @@ module.exports = {
                     data.price = butle_price_1 ? butle_price_1 : null
                     data.image = butle_image ? 'https://' + butle_image : null
                     break
+                case 'www.rum21.se':
+                    data.name = htmlData("h1.css-1n1d7x1").text().toString().trim()
+                    data.price = htmlData(".price-and-energy-container .price-container .css-rjnyhs span.css-lbcv1j").text().toString().trim().match(/\d/g, '').join('')
+                    let imgGrant = htmlData('img.css-mtgb98').attr('src').trim()
+                    data.image = imgGrant ? imgGrant : null
+                    data.currency = htmlData(".price-and-energy-container.css-oxc0i5 .css-rjnyhs span.css-lbcv1j").text().toString().trim().match(/[A-Za-z]/g).join('')
+                    break
+                case 'www.hemtex.se':
+                    let textNode = htmlData('body > script')[0].children[0].data
+                    textNode = textNode.trim().split(";")[3].trim()
+                    textNode = textNode.replace('window.CURRENT_PAGE = ', '')
+                    textNode = JSON.parse(textNode)
+                    textNode = textNode.jsonLd[0]
+                    data.name  = textNode.name
+                    data.price = textNode.offers[0].price
+                    data.image  = "https://www.hemtex.se/" + textNode.image
+                    data.currency = textNode.offers[0].priceCurrency
+                    break
+                case 'roomly.se':
+                    data.name = htmlData(".product_title.entry-title").text().toString().trim()
+                    data.price = htmlData("p.price span.woocommerce-Price-amount.amount bdi").text().toString().trim().match(/\d/g, '').join('')
+                    let imgRoomly = htmlData('img.wp-post-image.wp-post-image').attr('src').trim()
+                    data.image = imgRoomly ? imgRoomly : null
+                    data.currency = htmlData("p.price span.woocommerce-Price-amount.amount bdi").text().toString().trim().match(/[A-Za-z]/g).join('')
+                    break
+                case 'www.nordiskagalleriet.se':
+                    data.name = htmlData("#Faktakolumn .ArtikelnamnFalt").text().toString().trim()
+                    data.price = htmlData("#PrisFalt .PrisBOLD").text().toString().trim().match(/\d/g, '').join('')
+                    let imgNord = htmlData('a#productzoom.ProduktBild').attr('href').trim()
+                    data.image = imgNord ? 'https://www.nordiskagalleriet.se' + imgNord : null
+                    data.currency = htmlData("#PrisFalt .PrisBOLD").text().toString().trim().match(/[A-Za-z]/g).join('')
+                    break
+                case 'www.houseofdagmar.com':
+                    let infoText = htmlData("h2.leading-tight.text-base.tracking-widest:nth-child(1)").text().toString().trim()
+                    infoText = infoText.split('\n')
+                    data.name = infoText[0].trim()
+                    data.price = infoText[1].trim().match(/\d/g, '').join('')
+                    data.currency = infoText[1].trim().match(/[A-Za-z]/g).join('')
+                    let imgHouse = htmlData('picture img.object-cover.w-full.hideImgAltText').attr('src').trim()
+                    data.image = imgHouse ? imgHouse : null
+                    break
+                case 'cooee.eu':
+                    data.name = htmlData("h1.product_title.entry-title").text().toString().trim()
+                    let imgCooee = htmlData('div.variation-item img:nth-child(1)').attr('src').trim()
+                    data.image = imgCooee ? imgCooee : null
+                    let myJsonData = htmlData(".variations_form.cart").attr("data-product_variations")
+                    myJsonData = JSON.parse(myJsonData)[0]
+                    data.price = myJsonData.display_price
+                    const $curr = cheerio.load(myJsonData.price_html)
+                    data.currency = $curr('.woocommerce-Price-currencySymbol').text().toString().trim()
+                    break
+                case 'www.svenssons.se':
+                    let scriptNode = htmlData("body > script[type='application/ld+json']")[0].children[0].data
+                    scriptNode = JSON.parse(scriptNode)
+                    scriptNode = scriptNode[0]
+                    data.name  = scriptNode.name
+                    data.price = scriptNode.offers[0].price
+                    data.image  = "https://www.svenssons.se/" + scriptNode.image[0]
+                    data.currency = scriptNode.offers[0].priceCurrency
+                    break
+                // case 'www.designhousestockholm.com':
+                //     console.log('design house')
+                    // data.name = htmlData("page-title-wrapper.product .page-title span.base").text().toString().trim()
+                    // data.price = htmlData(".price-and-energy-container .price-container .css-rjnyhs span.css-lbcv1j").text().toString().trim().match(/\d/g, '').join('')
+                    // let imgGrant = htmlData('img.css-mtgb98').attr('src').trim()
+                    // data.image = imgGrant ? imgGrant : null
+                    // data.currency = htmlData(".price-and-energy-container.css-oxc0i5 .css-rjnyhs span.css-lbcv1j").text().toString().trim().match(/[A-Za-z]/g).join('')
+                    // break
+                case 'www.nk.se':
+                    let scriptPeace = htmlData("body script")[3].children[0].data
+                    scriptPeace = scriptPeace.trim().split(";\n")[3]
+                    scriptPeace = scriptPeace.replace('window.CURRENT_PAGE = ', '')
+                    scriptPeace = JSON.parse(scriptPeace)
+                    scriptPeace = scriptPeace.jsonLd[0]
+                    console.log(scriptPeace);
+                    data.name  = scriptPeace.name
+                    data.price = scriptPeace.offers[0].price
+                    data.image  = "https://www.nk.se/" + scriptPeace.image
+                    data.currency = scriptPeace.offers[0].priceCurrency
+                    
                 default:
                     return res.status(200).json({error: false, message: 'Gift List', data})
             }
-            return res.status(200).json({error: false, message: 'List', data})
+            return res.status(200).json({error: true, message: 'List', data})
         } catch (e) {
-            return res.status(200).json({error: false, message: e.message, data})
+            return res.status(200).json({error: true, message: e.message, data})
         }
 
     },
